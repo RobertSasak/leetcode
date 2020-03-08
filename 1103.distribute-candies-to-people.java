@@ -48,7 +48,7 @@ class Solution {
     //     return a;
     // }
 
-    public int[] distributeCandiesSlow(int candies, int num_people) {
+    public int[] distributeCandies(int candies, int num_people) {
         int[] a = new int[num_people];
         int i = 0;
         int counter = 1;
