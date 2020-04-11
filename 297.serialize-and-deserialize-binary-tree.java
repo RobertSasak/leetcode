@@ -16,8 +16,53 @@
  */
 public class Codec {
 
-    // Encodes a tree to a single string.
+    // DFS
     public String serialize(TreeNode root) {
+        StringBuffer sb = new StringBuffer();
+        serialize(root, sb);
+        System.out.println(sb.toString());
+        return sb.toString();
+    }
+    
+    void serialize(TreeNode root, StringBuffer sb) {
+        if (root == null) {
+            sb.append("null,");
+            return;
+        }
+        
+        sb.append(root.val + ",");
+        serialize(root.left, sb);
+        serialize(root.right, sb);
+    }
+    
+    public TreeNode deserialize(String data) {
+        String[] splitted = data.split(",");
+        Queue<Integer> q = new LinkedList<>();
+        for (String s : splitted) {
+            if (s.equals("null")) {
+                q.add(null);
+            } else {
+                q.add(Integer.parseInt(s));
+            }
+        }
+        return deserialize(q);
+    }
+    
+    public TreeNode deserialize(Queue<Integer> q) {
+        Integer n = q.poll();
+        if (n == null) {
+            return null;
+        }
+        
+        TreeNode node = new TreeNode(n);
+        node.left = deserialize(q);
+        node.right = deserialize(q);
+        return node;
+    }
+            
+    
+    // BFS serialization
+    public String serializeBFS(TreeNode root) {
         if (root == null) return "[]";
         ArrayList<Integer> r = new ArrayList<Integer>();
         Queue<TreeNode> q = new LinkedList<>();
@@ -50,9 +95,8 @@ public class Codec {
         System.out.println(String.join(",", s));
         return "[" + String.join(",", s) + "]";
     }
-  
-    // Decodes your encoded data to tree.
-    public TreeNode deserialize(String data) {
+
+    public TreeNode deserializeBFS(String data) {
         data = data.replace("[", "").replace("]", "");
         if (data.isEmpty()) return null;
         String[] tokens = data.split(",");
